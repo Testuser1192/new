@@ -22,15 +22,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Nodemailer configuratie (zoals Python werkte)
   const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    secure: false,
+    port: parseInt(process.env.SMTP_PORT, 10) || 587,
+    secure: false, // STARTTLS
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
     },
     tls: {
+      ciphers: 'SSLv3',
       rejectUnauthorized: false
     }
   });
@@ -39,7 +41,7 @@ export default async function handler(req, res) {
 
   try {
     const info = await transporter.sendMail({
-      from: `Chatwize <chatgptpython@gmail.com>`, // Geverifieerde Gmail
+      from: `Webhook App <${process.env.SMTP_USER}>`, // Belangrijk: hetzelfde als SMTP_USER
       to: email,
       subject: 'Nieuwe webhook data',
       text: payload
