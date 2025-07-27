@@ -39,7 +39,7 @@ export default async function handler(req, res) {
 
   try {
     const info = await transporter.sendMail({
-      from: `Webhook App <${process.env.SMTP_USER}>`,
+      from: `Chatwize <chatgptpython@gmail.com>`, // Geverifieerde Gmail
       to: email,
       subject: 'Nieuwe webhook data',
       text: payload
